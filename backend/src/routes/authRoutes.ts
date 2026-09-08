@@ -184,6 +184,12 @@ router.post('/verify-2fa', async (req: Request, res: Response): Promise<void> =>
 
 // เครื่องมือทดสอบ: สลับบทบาทโดยไม่ผ่าน OTP ใช้เฉพาะการสาธิตภายใน
 router.post('/quick-login', async (req: Request, res: Response): Promise<void> => {
+  // ปิดช่องทางข้ามรหัสผ่านเป็นค่าเริ่มต้น และห้ามเปิดเด็ดขาดใน production
+  if (process.env.NODE_ENV === 'production' || process.env.ENABLE_DEMO_QUICK_LOGIN !== 'true') {
+    res.status(404).json({ success: false, message: 'ไม่พบ endpoint นี้' });
+    return;
+  }
+
   const { role } = req.body;
   if (!role) {
     res.status(400).json({ success: false, message: 'กรุณาระบุ role ที่ต้องการสลับ' });
