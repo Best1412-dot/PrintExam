@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { examsApi } from '../../api/exams';
+import { resolveBackendUrl } from '../../api/client';
 import { Exam, ExamStatus } from '../../types';
 import { StatusBadge } from '../../components/common/StatusBadge';
 import { StatusTimeline } from '../../components/common/StatusTimeline';
@@ -144,7 +145,7 @@ export const ExamReviewPage: React.FC = () => {
 
           {exam.file_url && (
             <a
-              href={exam.file_url}
+              href={resolveBackendUrl(exam.file_url)}
               target="_blank"
               rel="noreferrer"
               className="inline-flex items-center gap-1.5 px-4 py-2 bg-brand-600 hover:bg-brand-700 text-white rounded-xl text-xs font-bold shadow-md shadow-brand-500/20 transition-all"

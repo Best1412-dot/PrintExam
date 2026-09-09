@@ -29,8 +29,9 @@ export const WebSocketProvider: React.FC<{ children: ReactNode }> = ({ children 
     }
 
     const connectWs = () => {
+      const configuredWsUrl = import.meta.env.VITE_WS_URL as string | undefined;
       const protocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
-      const wsUrl = `${protocol}//${window.location.host}/ws`;
+      const wsUrl = configuredWsUrl || `${protocol}//${window.location.host}/ws`;
 
       try {
         const ws = new WebSocket(wsUrl);

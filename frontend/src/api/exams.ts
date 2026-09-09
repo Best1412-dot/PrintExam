@@ -1,4 +1,4 @@
-import { apiClient } from './client';
+import { API_BASE_URL, apiClient } from './client';
 import { Exam } from '../types';
 
 export const examsApi = {
@@ -59,7 +59,7 @@ export const examsApi = {
   },
 
   getEnvelopeLabelUrl: (id: number | string): string => {
-    return `/api/exams/${id}/envelope-label`;
+    return `${API_BASE_URL}/exams/${id}/envelope-label`;
   },
 
   // Delivery (REQ-0012)

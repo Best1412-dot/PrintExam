@@ -25,6 +25,15 @@ const app = express();
 const server = http.createServer(app);
 const PORT = process.env.PORT || 4000;
 
+/**
+ * Production รับคำขอจากโดเมนที่กำหนดใน FRONTEND_URL เท่านั้น
+ * รองรับหลายโดเมนโดยคั่นด้วย comma เช่น production และ Vercel preview
+ */
+const allowedOrigins = (process.env.FRONTEND_URL || 'http://localhost:5173')
+  .split(',')
+  .map((origin) => origin.trim())
+  .filter(Boolean);
+
 // Ensure upload directory exists
 const uploadDir = path.join(__dirname, '../uploads');
 if (!fs.existsSync(uploadDir)) {
@@ -40,7 +49,14 @@ if (!fs.existsSync(mockDocx)) {
 // Middlewares
 app.use(
   cors({
-    origin: '*',
+    origin: (origin, callback) => {
+      // คำขอจาก server-to-server ไม่มี Origin และอนุญาต local frontend ใน development
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+        return;
+      }
+      callback(new Error('Origin is not allowed by CORS'));
+    },
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
   })

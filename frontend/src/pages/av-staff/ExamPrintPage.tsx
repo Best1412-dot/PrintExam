@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate, Link } from 'react-router-dom';
 import { examsApi } from '../../api/exams';
+import { resolveBackendUrl } from '../../api/client';
 import { Exam, ExamStatus } from '../../types';
 import { StatusBadge } from '../../components/common/StatusBadge';
 import { EnvelopePreviewModal } from '../../components/envelope/EnvelopePreviewModal';
@@ -133,7 +134,7 @@ export const ExamPrintPage: React.FC = () => {
             </div>
             {exam.file_url && (
               <a
-                href={exam.file_url}
+                href={resolveBackendUrl(exam.file_url)}
                 target="_blank"
                 rel="noreferrer"
                 className="text-brand-600 font-semibold hover:underline inline-flex items-center gap-1 mt-1"
